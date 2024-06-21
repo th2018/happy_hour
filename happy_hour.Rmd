@@ -8,7 +8,9 @@ output:
 ---
 
 ```{r}
+# install.packages("scales")
 library(scales)
+# install.packages("tidyverse")
 library(ggplot2)
 ```
 
@@ -19,12 +21,22 @@ bar <- data.frame("Bar"=c("Bittercreek", "Bardenay"  ),
 bar$ID<-1:2
 ```
 
-geom_segment() draws a straight line between points (x, y) and (xend, yend).
+
 ```{r}
+#geom_segment() draws a straight line between points (x, y) and (xend, yend).
 ggplot() +
   geom_segment(data = bar, aes(x =  start, y =  ID, xend =  end, yend = ID , col= Bar), size = 4) + labs(x = "Time", y="")
 
+
+
+```
+
+```{r}
 ggplot() + geom_rect(data=bar, aes(xmin=start, xmax=end,
                               ymin=Bar, ymax=Bar, color=Bar),size=15)
+```
+
+```{r}
+
 ```
 
