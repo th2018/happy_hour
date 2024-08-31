@@ -1,0 +1,139 @@
+---
+title: "Untitled"
+author: "Tao Huang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+https://www.r4photobiology.info/galleries/plot-timeline.html
+
+```{r}
+
+
+library(ggplot2)
+library(lubridate)
+# install.packages("ggrepel")
+library(ggrepel)
+```
+
+```{r}
+issues.tb <-
+  data.frame(what = c("1.5 month before fire", "Post-fire 1", "Post-fire 2", " (Post-fire 3) "),
+             when = ymd(c("2023-08-16", "2023-10-24", "2024-06-05",
+                          "2025-06-10" )),
+             event.type = "UAS flight")
+```
+
+```{r}
+ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
+  geom_line() +
+  geom_point() +
+  geom_text(hjust = -0.3, angle = 45) +
+  scale_x_date(name = "", date_breaks = "1 years") +
+  scale_y_discrete(name = "") +
+  theme_minimal()
+```
+
+We expand the  axis on the right and remove some white space from the  axis by adjusting the scales’ expansion (the default is mult = 0.05).
+```{r}
+ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
+  geom_line() +
+  geom_point() +
+  geom_text(hjust = -0.3, angle = 45) +
+  scale_x_date(name = "", date_breaks = "1 years",
+               expand = expansion(mult = c(0.05, 0.2))) +
+  scale_y_discrete(name = "",
+                   expand = expansion(mult = c(0.01, 0.02))) +
+  theme_minimal()
+```
+
+```{r}
+plants_periods.tb <-
+  data.frame(Periods = c( "Pre-fire", "Post-fire"
+    #"seedling\nemergence",                 "treatment\nperiod"
+                      ),
+             start = ymd(c("2023-06-01", "2023-10-07")),
+             end = ymd(c("2023-10-06", "2025-06-30")),
+             what = "UAS flight")
+
+plants_periods.tb
+```
+
+```{r}
+ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
+  geom_line() +
+  geom_segment(data = plants_periods.tb,
+               mapping = aes(x = start, xend = end,
+                             y = what, yend = what,
+                             colour = Periods),
+               linewidth = 2)+
+  geom_point() +
+  geom_text(hjust = -0.3, angle = 45) +
+  scale_x_date(name = "", date_breaks = "1 years",
+               expand = expansion(mult = c(0.05, 0.2))) +
+  scale_y_discrete(name = "",
+                   expand = expansion(mult = c(0.01, 0.02))) +
+  theme_minimal()
+
+```
+
+```{r}
+plants.tb <-
+  data.frame(what = c("2023-08-16", "2023-10-24", "2024-06-05", "(2025-06)"
+                      ),
+             when = ymd(c("2023-08-16", "2023-10-24", "2024-06-05", "2025-06-01"
+                          )),
+             series = "UAS flight")
+plants.tb
+```
+
+```{r}
+plants_periods.tb <-
+  data.frame(Periods = c("Post-fire","Pre-fire"
+                      ),
+             col=c("red","blue"),
+             start = ymd(c(  "2023-10-07","2023-08-01")),
+             end = ymd(c(  "2025-06-30" , "2023-10-06")),
+             series = "UAS flight")
+plants_periods.tb$Periods<-factor(plants_periods.tb$Periods, levels =c( "Pre-fire" , "Post-fire") )
+plants_periods.tb
+```
+
+
+```{r}
+ggplot(plants.tb, aes(x = when, y = series)) +
+  geom_line() +
+  geom_segment(data = plants_periods.tb,
+               mapping = aes(x = start, xend = end,
+                             y = series, yend = series,
+                             colour = Periods  
+                               ),
+              # col=plants_periods.tb$col,
+               linewidth = 2) +
+  geom_point(size = 4) +
+  geom_text_repel(aes(label = what),
+                  size = 5,
+                  direction = "y",
+                  point.padding = 0.5,
+                  hjust = 0,
+                  box.padding = 1,
+                  seed = 123) +
+  scale_x_date(name = "", date_breaks = "1 year",
+               #date_labels = "%d %B",
+               expand = expansion(mult = c(0.12, 0.12))) +
+  scale_y_discrete( name = "",
+                   expand = expansion(mult = c(1,  2) )) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        
+        axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    axis.text.x = element_text(size = 15),
+    axis.text.y = element_text(size = 15),
+    
+        legend.title = element_text(size = 0),
+    legend.text = element_text(size = 15)
+        )
+```
+
+
