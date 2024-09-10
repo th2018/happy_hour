@@ -2,14 +2,14 @@
 title: "Untitled"
 author: "Tao Huang"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 https://www.r4photobiology.info/galleries/plot-timeline.html
 
 ```{r}
-
-
 library(ggplot2)
 library(lubridate)
 # install.packages("ggrepel")
@@ -22,6 +22,7 @@ issues.tb <-
              when = ymd(c("2023-08-16", "2023-10-24", "2024-06-05",
                           "2025-06-10" )),
              event.type = "UAS flight")
+issues.tb
 ```
 
 ```{r}
@@ -46,6 +47,60 @@ ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
                    expand = expansion(mult = c(0.01, 0.02))) +
   theme_minimal()
 ```
+
+#GRINN
+```{r}
+issues.tb <-
+  data.frame(what = c("Pre-fire UAS classification", "Post-fire UAS classification",
+                     "Annual progress report (year 1)",
+                      "Pre-fire hydrologic modeling", "Post-fire hydrologic modeling", "Final report"),
+             when = ymd(c("2024-11-01", "2025-08-01","2025-09-01", "2025-01-01",
+                          "2025-11-01", "2026-01-01" )),
+             event.type = "UAS flight")
+issues.tb
+
+ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
+  geom_line() +
+  geom_point() +
+  geom_text(hjust = -0.3, angle = 45) +
+  scale_x_date(name = "", date_breaks = "6 months",#"1 years",
+               expand = expansion(mult = c(0.05, 0.4))) +
+  scale_y_discrete(name = "",
+                   expand = expansion(mult = c(0.01, 0.02))) +
+  theme_minimal()
+
+
+```
+
+#GRINN (no 2025 fieldwork)
+```{r}
+issues.tb <-
+  data.frame(what = c("Pre-fire UAS classification"
+                      , "Post-fire UAS classification",
+                     "Annual progress report (year 1)",
+                      "Pre-fire hydrologic modeling", "Post-fire hydrologic modeling", "Final report"),
+             when = ymd(c("2024-11-01"
+                          , "2025-04-01"
+                          ,"2025-09-01"
+                          , "2025-01-01",
+                          "2025-06-01"
+                          , "2026-01-01" )),
+             event.type = "UAS flight")
+issues.tb
+
+ggplot(issues.tb, aes(x = when, y = event.type, label = what)) +
+  geom_line() +
+  geom_point() +
+  geom_text(hjust = -0.3, angle = 45) +
+  scale_x_date(name = "", date_breaks = "3 months",#"1 years",
+               expand = expansion(mult = c(0.05, 0.4))) +
+  scale_y_discrete(name = "",
+                   expand = expansion(mult = c(0.01, 0.02))) +
+  theme_minimal()
+
+
+```
+
 
 ```{r}
 plants_periods.tb <-
@@ -135,5 +190,3 @@ ggplot(plants.tb, aes(x = when, y = series)) +
     legend.text = element_text(size = 15)
         )
 ```
-
-
